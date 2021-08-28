@@ -1,0 +1,14 @@
+curl -k -i -X POST \
+  "http://eventing-event-publisher-proxy.kyma-system/publish" \
+  -H "Content-Type: application/cloudevents+json" \
+  --data @- << EOF
+  {
+        "source": "kyma",
+        "specversion": "1.0",
+        "eventtypeversion": "v1",
+        "data": {"thingId":"1F24CC00EEE740B49FE8DED942AA6AF5"},
+        "datacontenttype": "application/json",
+        "id": "759815c3-b142-48f2-bf18-c6502dc0998s",
+        "type": "sap.kyma.custom.gunterweatherapp.iot.thingdata.v1"
+  }
+EOF

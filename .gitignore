@@ -1,0 +1,5 @@
+weatherapp
+.dockerignore
+*.code-workspace
+config
+k8s
