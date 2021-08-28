@@ -2,4 +2,5 @@ weatherapp
 .dockerignore
 *.code-workspace
 config
-k8s
+k8s-untested
+kubectl-commands.txt

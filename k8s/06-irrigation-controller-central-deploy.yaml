@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: irrigation-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: irrigation-controller
+  template:
+    metadata:
+      labels:
+        app: irrigation-controller
+        version: v1
+    spec:
+      containers:
+      - name: irrigation-controller
+        image: gunter04/irrigation-controller:latest 
+        imagePullPolicy: Always
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: 32Mi
+        volumeMounts:
+        - mountPath: /code/config
+          name: irrigation-controller-config-configmap 
+      volumes:
+      - name: irrigation-controller-config-configmap
+        configMap: 
+          name: irrigation-controller-configfile
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: irrigation-controller-configfile
+data:
+  weather.cfg: |
+    # This file contains all settings for the irrigation control
+    [openweather]
+    url = api.openweathermap.org/data/2.5/onecall # url for forecast call
+    apiid = f31744e55f7e45b2dda03316936d3e09 #Token for authentication, change here for your token!
+    exclude = current,minutely,hourly,alerts # Information to be excluded
+    lat = 1.3521 # Latitude
+    lon = 103.8198 # Longitude
+    units = metric # Unit system
+    lang = en # Language
+
+    [timing]
+    pauseInSeconds = 20 # Time until the next message is retrieved
+    runtimeOfProgram = 20 # Time until the program stops running (0 = Never) in minutes
+    weatherTimeout = 5 # Time in minutes for cache expiry
+
+    [redis]
+    redisHost = redis
+    redisPort = 6379
+    redisPassword = kPppOZp2hC
+    redisDb = 0
+
+    [irrigation]
+    rainfallMin = 10 # Must be at least 5mm precipitation forecasted
+    rainfallKey = rainfallFromOpenWeather
+    irrigationDuration = 2 # How long should the watering be on?
+
+    [sapiot]
+    commandUrl = https://a4042ecf-281e-4d4a-b721-c9b43461e188.eu10.cp.iot.sap/a4042ecf-281e-4d4a-b721-c9b43461e188/iot/core/api/v1/tenant/1954515505/devices/
+    iotUser = iot-thing-user # Common user, you can keep it!
+    iotPassword = 'SAPArm#01'
+    iotgetDataEvent = sap.kyma.custom.weatherappgunter.iot.thingdata.v1 #change here for your name. Don't use a dash or add a dot! Just change "gunter" to your name.

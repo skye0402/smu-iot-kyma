@@ -1,0 +1,39 @@
+# This event subscription deals with low moisture information
+apiVersion: eventing.kyma-project.io/v1alpha1
+kind: Subscription
+metadata:
+  name: lowmoisture-subscription-gunter  # Change to your name!
+spec:
+  filter:
+    filters:
+    - eventSource:
+        property: source
+        type: exact
+        value: ""
+      eventType:
+        property: type
+        type: exact
+        value: sap.kyma.custom.weatherappgunter.iot.moisturelow.v1 # Make sure it matches with your action in SAP IoT Application!
+  protocol: ""
+  protocolsettings: {}
+  sink: http://low-moisture-function-gunter.smu-gunter-test.svc.cluster.local # Adjust to your function name and namespace!
+---  
+# This event subscription deals with fetching the thing data
+apiVersion: eventing.kyma-project.io/v1alpha1
+kind: Subscription
+metadata:
+  name: thingdata-subscription-gunter # Change to your name!
+spec:
+  filter:
+    filters:
+    - eventSource:
+        property: source
+        type: exact
+        value: ""
+      eventType:
+        property: type
+        type: exact
+        value: sap.kyma.custom.weatherappgunter.iot.thingdata.v1 # Make sure it matches with 'iotgetDataEvent' in the weather.cfg!
+  protocol: ""
+  protocolsettings: {}
+  sink: http://get-thing-data-function-gunter.smu-gunter-test.svc.cluster.local # Adjust to your function name and namespace!

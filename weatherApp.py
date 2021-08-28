@@ -9,7 +9,6 @@
 #   Heavy rain — when the precipitation rate is > 7.6 mm per hour, or between 10 mm and 50 mm per hour
 #   Violent rain — when the precipitation rate is > 50 mm per hour
 
-from re import M
 import time
 from datetime import datetime
 from datetime import date as dt_date
@@ -67,6 +66,7 @@ irrigationDuration
 commandUrl = config.get("sapiot", "commandUrl")
 iotUser = config.get("sapiot", "iotUser")
 iotPassword = config.get("sapiot", "iotPassword").replace("'","")
+iotgetDataEvent = config.get("sapiot", "iotgetDataEvent")
 # -------------- Parameters ------------------<<<
 
 # Connect to Redis DB
@@ -110,7 +110,7 @@ def raiseNeedThingEvent(thingId):
     callUrl = "http://eventing-event-publisher-proxy.kyma-system/publish"
     # callUrl = "https://gunter-ext-event.c-0db7077.kyma.shoot.live.k8s-hana.ondemand.com" (for local testing)
     headers = { "Content-Type" : "application/cloudevents+json" }
-    body = '{ "source": "kyma", "specversion": "1.0", "eventtypeversion": "v1", "data": {"thingId": "' + thingId + '"}, "datacontenttype": "application/json", "id": "759815c3-b142-48f2-bf18-c6502dc0998s", "type": "sap.kyma.custom.gunterweatherapp.iot.thingdata.v1" }'
+    body = '{ "source": "kyma", "specversion": "1.0", "eventtypeversion": "v1", "data": {"thingId": "' + thingId + '"}, "datacontenttype": "application/json", "id": "759815c3-b142-48f2-bf18-c6502dc0998s", "type": "'+ iotgetDataEvent + '" }'
     response = requests.post(callUrl, headers=headers, data=body)
     data = json.loads(response.text)
     print("Raised event to obtain thing data with response " + str(response.status_code) + ".")
@@ -173,6 +173,7 @@ def handleIrrigation(thing, thingData, rainfall):
 
 # The main program
 def main():    
+    print("******************** Starting up irrigation controller component ********************")
     loopCondition = True
     then = datetime.now()
 
