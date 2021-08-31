@@ -1,0 +1,14 @@
+{
+	"source": "kyma",
+	"specversion": "1.0",
+	"eventtypeversion": "v1",
+	"data": {
+		"thingAlternateID": "${thing.alternateId}",
+		"thingExternalID": "${thing.externalId}",
+		"thingID": "${thing.id}",
+		"message": "Soil moisture at ${SILO_TIME_SERIES.soilMoisture}%"
+	},
+	"datacontenttype": "application/json",
+	"id": "759815c3-b142-48f2-bf18-c6502dc0998f",
+	"type": "sap.kyma.custom.weatherappgunter.iot.moisturelow.v1"
+}

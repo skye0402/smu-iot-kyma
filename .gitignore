@@ -3,4 +3,3 @@ weatherapp
 *.code-workspace
 config
 k8s-untested
-kubectl-commands.txt

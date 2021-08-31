@@ -1,0 +1,41 @@
+# An overview of useful kubectl commands for this project
+##########################################################
+
+# Set default namespace
+kubectl config set-context --current --namespace=gunter-smu
+
+# Get info about a pod
+kubectl describe pod capexample-app-diyanah-864f7f448-g9mgd     
+
+# Get logs
+ubectl logs capexample-app-diyanah-864f7f448-g9mgd        
+
+# Open a shell to a pod e.g.
+kubectl exec --stdin --tty redis-9f99b7fd6-s74wj  -- /bin/bash
+
+# Get all event subscriptions
+kubectl get subscriptions
+
+# Check an event subscription
+kubectl describe subscriptions lowmoisture-subscription
+
+# Get the details and see if status is active
+kubectl get subscription thingdata-subscription -o yaml
+
+# Delete a subscription
+kubectl delete subscriptions testsub
+
+# Create a secret to be used as hashed passwords in secret files etc.
+kubectl create secret generic sample-db-secret2 --from-literal=username=admin --from-literal=password=<the real password>
+
+# Forward an application to localhost (e.g. redis)
+kubectl port-forward redis-9f99b7fd6-s74wj 6379:6379   
+
+# Get information of a function 
+kubectl describe function <function>
+
+# Get function as yaml (as a backup if created in inline editor)
+kubectl get function <name> -oyaml
+
+## DOCKER ##
+docker build -t gunter04/iotsim-multiple:latest -f Dockerfile .
