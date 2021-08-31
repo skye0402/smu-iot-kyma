@@ -59,7 +59,7 @@ data:
     redisHost = redis
     redisPort = 6379
     redisPassword = kPppOZp2hC
-    redisDb = 0
+    redisDb = 0 # Adjust to your indvidual DB #
 
     [irrigation]
     rainfallMin = 10 # Must be at least 5mm precipitation forecasted
